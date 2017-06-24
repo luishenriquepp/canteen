@@ -1,5 +1,7 @@
 package shopManager;
 
+import shopClient.ClientTerminal;
+
 public class Order {
     private ClientTerminal client;
     private Unit ordered;
