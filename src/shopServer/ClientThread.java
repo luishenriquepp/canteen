@@ -1,16 +1,15 @@
-package shopClient;
+package shopServer;
 
 import java.net.Socket;
-import shopServer.Server;
 
-public class ClientTerminal extends Terminal implements Runnable {
+public class ClientThread extends TerminalThread implements Runnable {
     private Thread thread;
     
 //  by default the client have 75 bucks
 //  we could make it settable
     private final double cash = 75;
     
-    public ClientTerminal(Server server, Socket socket) {
+    public ClientThread(Server server, Socket socket) {
         super(server,socket);
     }
     

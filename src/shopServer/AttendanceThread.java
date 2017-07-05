@@ -1,12 +1,11 @@
-package shopClient;
+package shopServer;
 
 import java.net.Socket;
-import shopServer.Server;
 
-public class AttendanceTerminal extends Terminal implements Runnable {
+public class AttendanceThread extends TerminalThread implements Runnable {
     private Thread thread;
     
-    public AttendanceTerminal(Server server, Socket socket) {
+    public AttendanceThread(Server server, Socket socket) {
         super(server,socket);
     }
     

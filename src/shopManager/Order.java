@@ -1,19 +1,19 @@
 package shopManager;
 
-import shopClient.ClientTerminal;
+import shopServer.ClientThread;
 
 public class Order {
-    private ClientTerminal client;
+    private ClientThread client;
     private Unit ordered;
     
     public Order() { }
     
-    public Order(ClientTerminal client, Unit ordered) {
+    public Order(ClientThread client, Unit ordered) {
         this.client = client;
         this.ordered = ordered;
     }
     
-    public ClientTerminal getClient() {
+    public ClientThread getClient() {
         return this.client;
     }
     

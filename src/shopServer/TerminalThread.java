@@ -1,15 +1,14 @@
-package shopClient;
+package shopServer;
 
-import shopServer.Server;
 import java.io.IOException;
 import java.net.Socket;
 
-public abstract class Terminal {
+public abstract class TerminalThread {
     private final Socket socket;
     private final Server server;
     private boolean running;
     
-    public Terminal(Server server, Socket socket) {
+    public TerminalThread(Server server, Socket socket) {
         this.server = server;
         this.socket = socket;
     }

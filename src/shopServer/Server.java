@@ -3,33 +3,41 @@ package shopServer;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
-import shopClient.ClientTerminal;
-import shopClient.Terminal;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import shopManager.Menu;
 import shopManager.ShopManager;
 
 public class Server implements Runnable {
-    private List<Terminal> clients;
+    private List<TerminalThread> clients;
     private ServerSocket server;
     private final ShopManager shop = new ShopManager();
 
     @Override
     public void run() {
-        while (true) {
-            try {  
-                System.out.println("Waiting for a client"); 
-                addClient(server.accept()); 
-            }
-            catch(IOException ioe) {  
-                System.out.println("Server accept error: " + ioe); 
+        try {
+            this.server = new ServerSocket(4200);
+            this.clients = new ArrayList<>();
+            
+            while (true) {
+                try {  
+                    System.out.println("Waiting for a client");                 
+                    addClient(server.accept());
+                }
+                catch(IOException ioe) {  
+                    System.out.println("Server accept error: " + ioe); 
+                }
             }            
+        } catch (IOException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     private void addClient(Socket socket) throws IOException {
         System.out.println("Client accepted: " + socket);
-        ClientTerminal client = new ClientTerminal(this,socket);
+        ClientThread client = new ClientThread(this,socket);
         this.clients.add(client);
         client.start();
     }
@@ -64,7 +72,7 @@ public class Server implements Runnable {
         }
     }
         
-    private Terminal findClient(int id) {
+    private TerminalThread findClient(int id) {
         for(int i=0; i<this.clients.size();i++) {
             if(this.clients.get(i).getId() == id)
                return this.clients.get(i);
@@ -74,5 +82,10 @@ public class Server implements Runnable {
     
     private void inputLog(int id) {
         System.out.println("Server receiving request from client: "+id);
-    }    
+    }
+    
+    public static void main(String[] args) {
+        Server server = new Server();
+        server.run();
+    }
 }
