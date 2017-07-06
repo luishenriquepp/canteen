@@ -1,6 +1,8 @@
 package shopServer;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -24,10 +26,19 @@ public class Server implements Runnable {
             while (true) {
                 try {  
                     System.out.println("Waiting for a client");                 
-                    addClient(server.accept());
+                    Socket socket = addClient(server.accept());
+                    
+                    ObjectInputStream is = new ObjectInputStream(socket.getInputStream());
+                    ObjectOutputStream os = new ObjectOutputStream(socket.getOutputStream());
+                    double x = (double) is.readObject();
+                    System.out.println(x);
+                    
+//                    System.out.println(x.toString());                 
                 }
                 catch(IOException ioe) {  
                     System.out.println("Server accept error: " + ioe); 
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }            
         } catch (IOException ex) {
@@ -35,11 +46,12 @@ public class Server implements Runnable {
         }
     }
 
-    private void addClient(Socket socket) throws IOException {
+    private Socket addClient(Socket socket) throws IOException {
         System.out.println("Client accepted: " + socket);
         ClientThread client = new ClientThread(this,socket);
         this.clients.add(client);
         client.start();
+        return socket;
     }
     
     public synchronized void sendMenu(int id, String input) {  
